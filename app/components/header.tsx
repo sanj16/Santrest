@@ -20,8 +20,11 @@ function header() {
         </div>
         <HiBell className='text-[40px] text-gray-300' />
             <HiChat className='text-[40px] text-gray-300'/>
-            {session?.user? <Image src='{s  ' alt='user' width={60} height={60} className='hover:bg-gray-300 p-2
-        rounded-full cursor-pointer'/>:
+
+        {session?.user?  
+          <Image src={session.user.image}
+          alt='user-image' width={60} height={60}
+            className='hover:bg-gray-300 p-2 rounded-full cursor-pointer'/>:
 
         <button className='font-semibold p-2 px-4 rounded-full'onClick={() => signIn()}>Login</button>}
         
