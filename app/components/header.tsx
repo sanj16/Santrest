@@ -3,9 +3,13 @@ import React from 'react';
 import Image from 'next/image';
 import { useSession, signIn, signOut } from "next-auth/react"
 import { HiBell, HiChat, HiSearch } from "react-icons/hi";
+import { doc, getFirestore, setDoc } from "firebase/firestore";
+import app from 'next/app';
+
 
 function header() {
   const { data: session } = useSession()
+  const db = getFirestore(app);
   console.log(session)
   return (
     <div className='flex gap-3 md:gap-2 items-center p-6'>
