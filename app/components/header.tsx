@@ -1,16 +1,30 @@
 "use client"
-import React from 'react';
+import React, { useEffect } from 'react';
 import Image from 'next/image';
 import { useSession, signIn, signOut } from "next-auth/react"
 import { HiBell, HiChat, HiSearch } from "react-icons/hi";
 import { doc, getFirestore, setDoc } from "firebase/firestore";
-import app from 'next/app';
+import app from './../Shared/firebaseConfig';
 
 
 function header() {
-  const { data: session } = useSession()
+  const { data: session } = useSession();
   const db = getFirestore(app);
-  console.log(session)
+
+  useEffect(()=>{
+    saveUserInfo();
+  },[session])
+
+  const saveUserInfo = async () => {
+    if (session?.user) {
+      await setDoc(doc(db, "user", session.user.email || ""), {
+        userName: session.user.name,
+        email: session.user.email,
+        userImage: session.user.image
+      });
+    }
+  }
+  console.log(session);
   return (
     <div className='flex gap-3 md:gap-2 items-center p-6'>
       <Image src='/logo.png' alt='logo'
@@ -25,12 +39,12 @@ function header() {
         <HiBell className='text-[40px] text-gray-300' />
             <HiChat className='text-[40px] text-gray-300'/>
 
-        {session?.user?  
-          <Image src={session.user.image}
+        {session?.user ?  
+          <Image src={session.user.image ?? ''}
           alt='user-image' width={60} height={60}
-            className='hover:bg-gray-300 p-2 rounded-full cursor-pointer'/>:
+            className='hover:bg-gray-300 p-2 rounded-full cursor-pointer'/> :
 
-        <button className='font-semibold p-2 px-4 rounded-full'onClick={() => signIn()}>Login</button>}
+        <button className='font-semibold p-2 px-4 rounded-full' onClick={() => signIn()}>Login</button>}
         
 
 
